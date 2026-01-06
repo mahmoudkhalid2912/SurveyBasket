@@ -1,0 +1,2 @@
+﻿DBCC CHECKIDENT("Polls",RESEED,0)
+
