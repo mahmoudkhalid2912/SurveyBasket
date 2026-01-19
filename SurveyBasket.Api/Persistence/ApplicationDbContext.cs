@@ -38,6 +38,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> Options
             if (entry.State == EntityState.Added)
             {
                 entry.Property(A => A.CreatedById).CurrentValue = UserId;
+                entry.Property(A=>A.CreatedOn).CurrentValue= DateTime.UtcNow;
             }else if(entry.State == EntityState.Modified)
             {
                 entry.Property(A => A.UpdatedById).CurrentValue = UserId;

@@ -1,4 +1,4 @@
-﻿using Serilog;
+﻿
 using SurveyBasket.Api;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,17 +10,18 @@ builder.Host.UseSerilog((context, services, configuration) =>
         .ReadFrom.Services(services);
 });
 
-// Controllers 
+
 builder.Services.AddDependencies(builder.Configuration);
 
 var app = builder.Build();
 
-// Dev tools 
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors();
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseAuthorization();

@@ -11,10 +11,13 @@ public class AuthService(UserManager<ApplicationUser> userManager,IJwtProvider j
     private readonly int _refreshTokenExpiryDays = 14;
       public async  Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken)
     {
+        //check if user Exist or not 
         var user = await _userManager.FindByEmailAsync(email);
 
         if (user is null) return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
+
+        //check if password is valid or not
         bool isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
 
         if (!isPasswordValid) return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
@@ -39,10 +42,13 @@ public class AuthService(UserManager<ApplicationUser> userManager,IJwtProvider j
     {
         var userid = _jwtProvider.ValidateToken(token);
         if (userid is null) return Result.Failure<AuthResponse>(UserErrors.InvalidToken);
+
         var user = _userManager.FindByIdAsync(userid).Result;
         if (user is null) return Result.Failure<AuthResponse>(UserErrors.UserNotFound);
+
         var userRefreshToken = user.RefreshTokens.SingleOrDefault(rt => rt.Token == refreshtoken && rt.IsActive);
         if (userRefreshToken is null) return Result.Failure<AuthResponse>(UserErrors.InvalidRefreshToken);
+
         userRefreshToken.RevokedOn = DateTime.UtcNow;
         var (NewToken, ExpiresIn) = _jwtProvider.GenerateJwtToken(user);
 

@@ -12,6 +12,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
+global using Serilog;
 global using SurveyBasket.Api.Abstracions;
 global using SurveyBasket.Api.Authentication;
 global using SurveyBasket.Api.Contracts.Authentication;
